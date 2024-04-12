@@ -5,7 +5,6 @@ def unique_letter_count(text):
   letter_map = dict()
 
   for c in text.lower():
-
     if c == ' ' or not c.isalpha():
       continue
 
@@ -16,30 +15,35 @@ def unique_letter_count(text):
 
   return letter_map
 
-def book_report(text):
-  wc=word_count(text)
-  unique_letter_map=unique_letter_count(text)
-  
+def char_dict_to_sorted_list(char_dict):
   report_list = [
-    { "name": letter, "count": lc } for letter, lc in unique_letter_map.items()
+    { "name": letter, "count": lc } for letter, lc in char_dict.items()
   ]
 
   sort_on=lambda dict: dict["count"]
   report_list.sort(reverse=True, key=sort_on)
 
-  print("--- Begin report of books/frankenstein.txt ---\n")
+  return report_list
+
+def generate_book_report(text, book):
+  wc=word_count(text)
+  unique_char_map=unique_letter_count(text)
+  sorted_char_list=char_dict_to_sorted_list(unique_char_map)
+
+  print(f"--- Begin report of {book} ---\n")
   print(f"{wc} words found in the document\n")
 
-  for letter in report_list: 
+  for letter in sorted_char_list: 
     name, count = letter.values()
     print(f"The {name} character was found {count} times")
 
   print("\n-- end report --")
 
 def main():
-  with open("./books/frankenstein.txt") as file:
+  book_path="./books/frankenstein.txt"
+  with open(book_path) as file:
       text = file.read()
-      book_report(text)
+      generate_book_report(text, book_path)
 
 if __name__ == "__main__":
     main()
